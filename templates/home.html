@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CWAT Careers Portal</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center mt-4 mb-4">CWAT Careers</h1>
+            <img src="/static/CWAT-banner.jpg" class="img-fluid">
+            <h2 class="text-center mt-4 mb-4">About CWAT</h2>
+            <div class="row justify-content-start mb-4">
+                <div class="col-6">
+                    <p class="lead">CWAT, a brand by CWAT Engineering Nigeria LTD was founded in 2018 with a mission to make, reliable, affordable energy products available to all. In our modern world, one thing is true, light leads the way.
+
+                        CWAT Engineering Nigeria LTD is a leading manufacturer of LED bulbs and lighting products that wants everyone to discover the world through light. Inspired by the flow of electricity and LED technology we designed a unique and modern brand that separates itself from the industry cliches.
+                        
+                        CWAT Nigeria’s mission is to light up the world with sustainable energy and be the light for those who need it the most. Our products promise to go on and off, on and on, maintaining a quality that serves the demand of the global market.
+                        
+                        CWAT Nigeria’s solution combines revolutionary technology with an equally revolutionary business model.
+                    </p>
+                </div>
+                
+                <div class="col-6 align-self-center text-end">
+                    <img src="/static/CWAT-9W-Bulb-002.jpg">
+                </div>
+            </div>
+            <h2 class="text-center mt-4 mb-4">Open Positions</h2>
+            <p class="text-center">
+                {% for job in jobs%}
+                    {% include "jobitem.html" %}
+                {% endfor %}
+            </p>
+
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg">Contact Us</button>
+                <p class="mt-4">Copyright &#169 2023 - CWAT All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+</html>
