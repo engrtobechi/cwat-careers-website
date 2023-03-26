@@ -44,6 +44,6 @@ def hello_world():
 def list_jobs():
     return jsonify(JOBS)
 
-# Running the app
+# This block of code ensures that app.py starts the server when run
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug="True")
