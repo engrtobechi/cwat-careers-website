@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>{{job["title"]}} - CWAT Careers Portal</title>
+        {% include "bootstrap.html" %}        
+    </head>
+    <body>
+        {% include "nav.html"%}
+        <div class="container">
+            <h3 class="mt-4">{{job["title"]}}</h3>
+            <p class="lead">Location: {{job["location"]}}</p>
+            <h4>Salary</h4>
+            <p>{{job["currency"]}}{{job["salary"]}}</p>
+            <h4>Responsibilities</h4>
+            <ul>
+                {% for duty in job["responsibilities"].splitlines() %}
+                    <li>{{duty}}</li>
+                {% endfor %}
+            </ul>
+            <h4>Requirements</h4>
+            <ul>
+                {% for requirement in job["requirements"].splitlines() %}
+                    <li>{{requirement}}</li>
+                {% endfor %}
+            </ul>
+            <div class="text-center mt-5">
+                <a type="button" class="btn btn-primary" href="#">Apply Now</a>
+            </div>
+        </div>
+        {% include "footer.html"%}
+    </body>
+</html>
