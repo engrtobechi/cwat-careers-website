@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h4 class="text-center mt-4 mb-4">Application Form</h4>
+        <form action="/job/{{job['id']}}/apply" method="post">
+            <div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text" id="addon-wrapping">First Name: </span>
+                    <input type="text" class="form-control" name="first_name" placeholder="First Name" aria-label="First Name" aria-describedby="addon-wrapping">
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text" id="addon-wrapping">Last Name: </span>
+                    <input type="text" class="form-control" name="last_name" placeholder="Last Name" aria-label="Last Name" aria-describedby="addon-wrapping">
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text" id="addon-wrapping">Email: </span>
+                    <input type="email" class="form-control" name="email" placeholder="you@youremail.com" aria-label="you@youremail.com" aria-describedby="addon-wrapping">
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text" id="addon-wrapping">LinkedIn URL: </span>
+                    <input type="url" class="form-control" name="linkedin_url" placeholder="https://www.linkedin.com/in/username" aria-label="https://www.linkedin.com/in/username" aria-describedby="addon-wrapping">
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text">Educational Qualifications:</span>
+                    <textarea class="form-control" name="education" aria-label="Educational Qualifications" placeholder="List your educational qualification in assending order."></textarea>
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text">Work Experience:</span>
+                    <textarea class="form-control" name="work_experience" aria-label="Work Experience" placeholder="List your work experiences."></textarea>
+                </div>
+                <div class="input-group flex-nowrap mb-2">
+                    <span class="input-group-text" id="addon-wrapping">Resume URL: </span>
+                    <input type="url" class="form-control" name="resume_url" placeholder="https://www.example.com/example.pdf" aria-label="https://www.example.com/example.pdf" aria-describedby="addon-wrapping">
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</div>

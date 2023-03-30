@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Application Submitted: {{job["title"]}} at CWAT Careers Portal</title>
+        {% include "bootstrap.html" %}
+    </head>
+    <body>
+        {% include "nav.html"%}
+        <div class="container mt-4 mb-4 text-center">
+
+            <p class="lead">Thank you <strong>{{first_name}} {{last_name}}</strong>, your application for the role <strong>"{{job["title"]}}"</strong> has been recieved.</p>
+        
+        </div>
+        {% include "footer.html"%}
+    </body>
+</html>

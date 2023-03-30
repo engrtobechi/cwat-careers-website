@@ -1,69 +1,176 @@
+import re
+import time
 import sqlite3
-from flask import Flask, render_template, request, url_for, flash, redirect, abort, jsonify
+from functools import wraps
+from passlib.hash import sha256_crypt
+from flask import Flask, render_template, request, url_for, flash, redirect, abort, jsonify, session, logging
 
 app = Flask(__name__)
-# Create a secret key for client browser sessions
 app.config['SECRET_KEY'] = 'add your key here'
 
 def get_db_connection():
-    # Open connection to the database.db
     conn = sqlite3.connect("database.db")
-    # Create a dictionary cursor instead of the default tuple
     conn.row_factory = sqlite3.Row
     return conn
 
 def fetch_jobs():
-    # Call the get_db_connection method we defined above
     conn = get_db_connection()
-
-    # Fetch all the data in the posts table
     jobs_fetched = conn.execute("SELECT * FROM jobs").fetchall()
-    # Close the database connection
     conn.close()
-
     return jobs_fetched
 
-# Definning our route
+def get_job_by_id(id):
+    conn = get_db_connection()
+    job = conn.execute("SELECT * FROM jobs WHERE id=?", (id,)).fetchone()
+    conn.close()
+    return job
+
+# Define the function to control user roles
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if "logged_in" in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Unauthorized, please login.", "danger")
+            return redirect(url_for("login"))
+        
+    return wrap
+
 @app.route("/")
 def index():
-
     jobs_fetched = fetch_jobs()
-
-    # Using the render_template function from flask we render a html template as well as pass in data
     return render_template("index.html", jobs=jobs_fetched)
 
-# Let's create our portal api
 @app.route("/api/jobs/<id>/")
 def jsonify_jobs(id):
-
-    jobs_fetched = fetch_jobs()
-
-    # Create a list to hold jobs which will be pass in rows to the jsonify function
-    json_list = []
-    for job in jobs_fetched:
-        json_list.append(job)
-
-    if int(id)-1 > len(jobs_fetched):
-        return jsonify({"message":"Not found"})
+    job = get_job_by_id(id)
+    if job:
+        return jsonify(dict(job))
     else:
-        return jsonify(dict(json_list[int(id)-1]))
+        return jsonify({"message":"Not found"})
 
-# Let's create a route for generating dynamic pages for each job
 @app.route("/jobs/<id>/")
 def jobs_item_page(id):
-
-    jobs_fetched = fetch_jobs()
-
-    # Create a list to hold jobs which will be pass in rows to the jsonify function
-    job_list = []
-    for job in jobs_fetched:
-        job_list.append(job)
-
-    if int(id)-1 > len(jobs_fetched):
-        return "Not found", 404
+    job = get_job_by_id(id)
+    if job:
+        return render_template("jobpage.html", job=job)
     else:
-        return render_template("jobpage.html", job=job_list[int(id)-1])
+        abort(404)
 
-# This block of code ensures that app.py starts the server when run
+@app.route('/job/<id>/apply', methods=("POST",))
+def apply_to_job(id):
+    job = get_job_by_id(id)
+    if not job:
+        abort(404)
+
+    data = request.form
+    if not data.get('first_name'):
+        flash("First name is required!")
+    elif not data.get('email'):
+        flash("Email is required!")
+    else:
+        conn = get_db_connection()
+        conn.execute("INSERT INTO applications (job_id, first_name, last_name, email, linkedin_url, education, work_experience, resume_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                        (id, data['first_name'], data['last_name'], data['email'], data['linkedin_url'], data['education'], data['work_experience'], data['resume_url']))
+        conn.commit()
+        conn.close()
+
+        return render_template("application_submitted.html", job=job, first_name=data['first_name'], last_name=data['last_name'])
+
+
+# Add a new route to the Flask application to handle the user signup form.
+@app.route("/signup/", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        # Handle form submission
+        username = request.form.get("username")
+        raw_password = request.form.get("password")
+        email = request.form.get("email")
+        joined_at = time.time()
+
+        # Validate the data
+        if not username or not raw_password or not email:
+            flash("All fields are required!")
+        elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            flash("Please enter a valid email address!")
+        else:
+            # Hash paswword
+            password = sha256_crypt.hash(raw_password)
+            # Create the user
+            conn = get_db_connection()
+            try:
+                conn.execute("INSERT INTO 'users' (username, password, email, joined_at) VALUES (?, ?, ?, ?)",
+                        (username, password, email, joined_at))
+                conn.commit()
+                flash("You have successfully registered!")
+                return redirect(url_for("login"))
+            except sqlite3.IntegrityError:
+                flash("The email address is already in use!", "danger")
+            conn.close()
+    return render_template("signup.html")
+
+
+# Add a new route to the Flask application to handle the user login form.
+@app.route("/login/", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        # Handle form submission
+        username = request.form["username"]
+        password_supplied = str(request.form["password"])
+
+        # Check if the user exists
+        conn = get_db_connection()
+        user = conn.execute("SELECT * FROM 'users' WHERE username=?",
+                [username]).fetchone()
+        
+        conn.close()
+
+        if user is not None:
+
+            password = user["password"]
+            app.logger.info(password)
+            app.logger.info(password_supplied)
+            # Validate the data
+            if sha256_crypt.verify(password_supplied, password):
+
+                # Log the user in
+                session["logged_in"] = True
+                session["username"] = username
+
+                flash("You are now logged in.", "success")
+                return redirect(url_for("dashboard"))
+            else:
+                app.logger.info("I got here.")
+                flash("Invalid username or password")
+                return redirect(url_for("login"))
+
+        else:
+            error = "Username does not exist"
+            return render_template("login.html", error=error)
+
+    return render_template("login.html")
+
+# Logout route
+@app.route("/logout/")
+@login_required
+def logout():
+    session.clear()
+    flash("You are now logged out", "success")
+    return redirect(url_for("index"))
+
+# Add a new route to the Flask application to handle the user dashboard page.
+@app.route("/dashboard/")
+@login_required
+def dashboard():
+    # Fetch the user's applications
+    #conn = get_db_connection()
+    #applications = conn.execute("SELECT * FROM 'Applications' WHERE user_id=?", (session["user_id"],)).fetchall()
+    #conn.close()
+
+    return render_template("dashboard.html")
+
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug="True")

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CWAT Careers Portal</title>
+        {% include "bootstrap.html" %}
+        <style>
+            html,
+            body {
+              height: 100%;
+            }
+    
+            .body-mod {
+              display: flex;
+              align-items: center;
+              padding-top: 40px;
+              padding-bottom: 40px;
+            }
+    
+            .form-signin {
+              max-width: 330px;
+              padding: 15px;
+            }
+    
+            .form-signin .form-floating:focus-within {
+              z-index: 2;
+            }
+    
+            .form-signin input[type="email"] {
+              margin-bottom: -1px;
+              border-bottom-right-radius: 0;
+              border-bottom-left-radius: 0;
+            }
+    
+            .form-signin input[type="password"] {
+              margin-bottom: 10px;
+              border-top-left-radius: 0;
+              border-top-right-radius: 0;
+            }
+    
+        </style>
+    </head>
+    <body>
+        {% include "nav.html"%}
+        <div class="container">
+            {% include "includes/_messages.html" %}
+            {% block body %}
+            {% endblock %}
+            {% include "footer.html"%}
+        </div>
+        <script src="/static/js/bootstrap.min.js"></script>
+    </body>
+</html>

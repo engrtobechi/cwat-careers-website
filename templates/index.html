@@ -1,39 +1,30 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>CWAT Careers Portal</title>
-        {% include "bootstrap.html" %}
-    </head>
-    <body>
-        {% include "nav.html"%}
-        <div class="container">
-            <h1 class="text-center mt-4 mb-4">CWAT Careers</h1>
-            <img src="/static/img/CWAT-banner.jpg" class="img-fluid">
-            <h2 class="text-center mt-4 mb-4">About CWAT</h2>
-            <div class="row justify-content-start mb-4">
-                <div class="col-md-6">
-                    <p class="lead text-sm-center text-lg-start">CWAT, a brand by CWAT Engineering Nigeria LTD was founded in 2018 with a mission to make, reliable, affordable energy products available to all. In our modern world, one thing is true, light leads the way.
-                        CWAT in Nigeria is a leading manufacturer of LED bulbs and lighting products that wants everyone to discover the world through light. Inspired by the flow of electricity and LED technology we designed a unique and modern brand that separates itself from the industry cliches.
-                        CWAT in Nigeria’s mission is to light up the world with sustainable energy and be the light for those who need it the most. Our products promise to go on and off, on and on, maintaining a quality that serves the demand of the global market.
-                        CWAT in Nigeria’s solution combines revolutionary technology with an equally revolutionary business model.
-                    </p>
-                </div>
-                
-                <div class="d-none d-md-block col-md-6 align-self-center text-end">
-                    <img src="/static/img/CWAT-9W-Bulb-002.jpg">
-                </div>
-            </div>
-            <h2 class="text-center mt-4 mb-4">Open Positions</h2>
-            <div>
-                {% for job in jobs%}
-                    {% include "jobitem.html" %}
-                {% endfor %}
-            </div>
+{% extends "base.html "%}
 
-            <div class="text-center">
-                <button class="btn btn-primary btn-lg">Contact Us</button>
-            </div>
-            {% include "footer.html"%}
+{% block body %}
+    <h1 class="text-center mt-4 mb-4">CWAT Careers</h1>
+    <img src="/static/img/CWAT-banner.jpg" class="img-fluid">
+    <h2 class="text-center mt-4 mb-4">About CWAT</h2>
+    <div class="row justify-content-start mb-4">
+        <div class="col-md-6">
+            <p class="lead text-sm-center text-lg-start">CWAT, a brand by CWAT Engineering Nigeria LTD was founded in 2018 with a mission to make, reliable, affordable energy products available to all. In our modern world, one thing is true, light leads the way.
+                CWAT in Nigeria is a leading manufacturer of LED bulbs and lighting products that wants everyone to discover the world through light. Inspired by the flow of electricity and LED technology we designed a unique and modern brand that separates itself from the industry cliches.
+                CWAT in Nigeria’s mission is to light up the world with sustainable energy and be the light for those who need it the most. Our products promise to go on and off, on and on, maintaining a quality that serves the demand of the global market.
+                CWAT in Nigeria’s solution combines revolutionary technology with an equally revolutionary business model.
+            </p>
         </div>
-    </body>
-</html>
+        
+        <div class="d-none d-md-block col-md-6 align-self-center text-end">
+            <img src="/static/img/CWAT-9W-Bulb-002.jpg">
+        </div>
+    </div>
+    <h2 class="text-center mt-4 mb-4">Open Positions</h2>
+    <div>
+        {% for job in jobs%}
+            {% include "jobitem.html" %}
+        {% endfor %}
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary btn-lg">Contact Us</button>
+    </div>
+{% endblock %}

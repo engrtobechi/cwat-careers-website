@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+    <title>Sign Up - CWAT Careers Portal</title>
+    {% include "bootstrap.html" %}
+    
+    <style>
+        html,
+        body {
+          height: 100%;
+        }
+
+        .body-mod {
+          display: flex;
+          align-items: center;
+          padding-top: 40px;
+          padding-bottom: 40px;
+        }
+
+        .form-signin {
+          max-width: 330px;
+          padding: 15px;
+        }
+
+        .form-signin .form-floating:focus-within {
+          z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+          margin-bottom: -1px;
+          border-bottom-right-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+          margin-bottom: 10px;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+        }
+
+    </style>
+</head>
+<body>
+    {% include "nav.html"%}
+    <div class="container body-mod text-center">
+      <main class="form-signin w-100 m-auto">
+        <form action="/login/" method="POST">
+          <h1 class="h3 mb-3 fw-normal">Login</h1>
+          <div class="form-floating mb-3">
+            <input type="username" class="form-control" name="username" id="floating-input" placeholder="johndoe">
+            <label for="floating-input" class="form-label">Username</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" id="floatingPassword" name="password" class="form-control" aria-labelledby="passwordHelpBlock">
+            <label for="floatingPassword" class="form-label">Password</label>
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        </form>
+      </main>
+    </div>
+    {% include "footer.html"%}
+  </body>
+</html>
